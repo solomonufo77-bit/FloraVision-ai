@@ -1,0 +1,85 @@
+name: Build FloraVision AI Android AAB
+
+on:
+  push:
+    branches:
+      - main
+      - master
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-android:
+    name: Build Android Release AAB
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: gradle
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Android SDK packages
+        run: |
+          yes | sdkmanager --licenses || true
+          sdkmanager "platform-tools"
+          sdkmanager "platforms;android-36"
+          sdkmanager "build-tools;36.0.0"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build web application
+        run: npm run build
+
+      - name: Verify Capacitor
+        run: npx cap --version
+
+      - name: Sync Capacitor Android
+        run: npx cap sync android
+
+      - name: Make Gradle executable
+        run: chmod +x android/gradlew
+
+      - name: Verify Android configuration
+        working-directory: android
+        run: |
+          ./gradlew --version
+          ./gradlew :app:properties
+
+      - name: Build release AAB
+        working-directory: android
+        run: ./gradlew bundleRelease --stacktrace
+
+      - name: Verify AAB
+        run: |
+          if [ ! -f android/app/build/outputs/bundle/release/app-release.aab ]; then
+            echo "ERROR: Release AAB was not generated."
+            exit 1
+          fi
+
+          ls -lh android/app/build/outputs/bundle/release/app-release.aab
+
+      - name: Upload release AAB
+        uses: actions/upload-artifact@v4
+        with:
+          name: FloraVision-AI-Android-AAB
+          path: android/app/build/outputs/bundle/release/app-release.aab
+          if-no-files-found: error
