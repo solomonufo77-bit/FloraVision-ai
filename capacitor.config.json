@@ -1,0 +1,11 @@
+{
+  "appId": "com.floravision.app",
+  "appName": "FloraVision AI",
+  "webDir": "dist",
+  "android": {
+    "backgroundColor": "#0f172a"
+  },
+  "server": {
+    "androidScheme": "https"
+  }
+}
