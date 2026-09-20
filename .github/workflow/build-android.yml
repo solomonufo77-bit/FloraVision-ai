@@ -1,0 +1,98 @@
+name: Build FloraVision AI Android AAB
+
+on:
+  push:
+    branches:
+      - main
+      - master
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-android:
+    name: Build Android Release AAB
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Get the GitHub repository
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. Install Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      # 3. Install Java for Android/Gradle
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: gradle
+
+      # 4. Install Android SDK 36
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Android SDK packages
+        run: |
+          yes | sdkmanager --licenses || true
+          sdkmanager "platform-tools"
+          sdkmanager "platforms;android-36"
+          sdkmanager "build-tools;36.0.0"
+
+      # 5. Install JavaScript dependencies
+      - name: Install dependencies
+        run: npm ci
+
+      # 6. Build the React/Vite application
+      - name: Build web application
+        run: npm run build
+
+      # 7. Verify Capacitor installation
+      - name: Verify Capacitor
+        run: npx cap --version
+
+      # 8. Synchronize web application and plugins with Android
+      - name: Sync Capacitor Android
+        run: npx cap sync android
+
+      # 9. Make Gradle executable
+      - name: Make Gradle executable
+        run: chmod +x android/gradlew
+
+      # 10. Verify Android SDK configuration
+      - name: Verify Android configuration
+        working-directory: android
+        run: |
+          ./gradlew --version
+          ./gradlew :app:properties
+
+      # 11. Build release AAB
+      - name: Build release AAB
+        working-directory: android
+        run: ./gradlew bundleRelease --stacktrace
+
+      # 12. Verify generated AAB
+      - name: Verify AAB
+        run: |
+          if [ ! -f android/app/build/outputs/bundle/release/app-release.aab ]; then
+            echo "ERROR: Release AAB was not generated."
+            exit 1
+          fi
+
+          ls -lh android/app/build/outputs/bundle/release/app-release.aab
+
+      # 13. Upload AAB to GitHub Actions
+      - name: Upload release AAB
+        uses: actions/upload-artifact@v4
+        with:
+          name: FloraVision-AI-Android-AAB
+          path: android/app/build/outputs/bundle/release/app-release.aab
+          if-no-files-found: error
