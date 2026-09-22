@@ -1,1 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <!-- Background Gradient -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="50%" stop-color="#064e3b" />
+      <stop offset="100%" stop-color="#022c22" />
+    </linearGradient>
 
+    <!-- Leaf Main Gradient -->
+    <linearGradient id="leafGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#34d399" />
+      <stop offset="100%" stop-color="#059669" />
+    </linearGradient>
+
+    <!-- Scanner Glow Gradient -->
+    <linearGradient id="glowGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#a7f3d0" stop-opacity="0.8" />
+      <stop offset="100%" stop-color="#10b981" stop-opacity="0.0" />
+    </linearGradient>
+
+    <!-- Text Gradient -->
+    <linearGradient id="textGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#6ee7b7" />
+      <stop offset="100%" stop-color="#34d399" />
+    </linearGradient>
+  </defs>
+
+  <!-- Squircle App Background -->
+  <rect x="16" y="16" width="480" height="480" rx="108" fill="url(#bgGrad)" stroke="#10b981" stroke-width="4" stroke-opacity="0.3" />
+
+  <!-- Outer Scanning Target Frame -->
+  <path d="M 100 130 L 100 100 Q 100 90 110 90 L 140 90" fill="none" stroke="#34d399" stroke-width="7" stroke-linecap="round" />
+  <path d="M 372 90 L 402 90 Q 412 90 412 100 L 412 130" fill="none" stroke="#34d399" stroke-width="7" stroke-linecap="round" />
+  <path d="M 412 290 L 412 320 Q 412 330 402 330 L 372 330" fill="none" stroke="#34d399" stroke-width="7" stroke-linecap="round" />
+  <path d="M 140 330 L 110 330 Q 100 330 100 320 L 100 290" fill="none" stroke="#34d399" stroke-width="7" stroke-linecap="round" />
+
+  <!-- Botanical Leaf Symbol -->
+  <g transform="translate(166, 95) scale(0.75)">
+    <!-- Main Leaf Body -->
+    <path d="M 120 20 C 180 20, 220 70, 220 130 C 220 190, 170 220, 120 220 C 70 220, 20 190, 20 130 C 20 70, 60 20, 120 20 Z" fill="url(#leafGrad)" />
+    
+    <!-- Inner Leaf Vein Line -->
+    <path d="M 120 25 L 120 215" stroke="#022c22" stroke-width="6" stroke-linecap="round" opacity="0.4" />
+    <path d="M 120 80 Q 150 60 170 50" fill="none" stroke="#022c22" stroke-width="4" stroke-linecap="round" opacity="0.4" />
+    <path d="M 120 120 Q 160 100 185 90" fill="none" stroke="#022c22" stroke-width="4" stroke-linecap="round" opacity="0.4" />
+    <path d="M 120 100 Q 80 80 55 70" fill="none" stroke="#022c22" stroke-width="4" stroke-linecap="round" opacity="0.4" />
+    <path d="M 120 140 Q 75 120 50 110" fill="none" stroke="#022c22" stroke-width="4" stroke-linecap="round" opacity="0.4" />
+  </g>
+
+  <!-- Horizontal Laser Scan Line -->
+  <line x1="80" y1="210" x2="432" y2="210" stroke="#6ee7b7" stroke-width="5" stroke-linecap="round" />
+  <rect x="80" y="210" width="352" height="30" fill="url(#glowGrad)" />
+
+  <!-- AI Sparkle Icon -->
+  <g transform="translate(325, 105) scale(0.8)">
+    <path d="M 25 0 L 30 18 L 48 23 L 30 28 L 25 46 L 20 28 L 2 23 L 20 18 Z" fill="#fde047" />
+  </g>
+
+  <!-- APP NAME TEXT SECTION -->
+  <!-- Main Title: FloraVision -->
+  <text x="256" y="390" text-anchor="middle" fill="url(#textGrad)" font-family="system-ui, -apple-system, sans-serif" font-weight="800" font-size="42" letter-spacing="1">
+    FloraVision
+  </text>
+
+  <!-- Subtitle Badge: AI -->
+  <rect x="226" y="408" width="60" height="26" rx="8" fill="#10b981" />
+  <text x="256" y="426" text-anchor="middle" fill="#022c22" font-family="system-ui, -apple-system, sans-serif" font-weight="900" font-size="16" letter-spacing="1">
+    AI
+  </text>
+</svg>
